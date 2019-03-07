@@ -1,10 +1,4 @@
-from flask import Flask, render_template, url_for
-import socket
-from flask_login import LoginManager
-
-app = Flask(__name__)
-login = LoginManager(app)
-
+from app import app
 
 @app.route('/')
 @app.route('/change_user')
