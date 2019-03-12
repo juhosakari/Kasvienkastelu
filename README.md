@@ -1,13 +1,13 @@
-# Kasvienkastelu
+## Kasvienkastelu
 Munkan kasvienkastelu projekti
 
-väliaika
+- #väliaika
   - kuvan otto
-  lannoitus
-  lämpötilan ja kosteuden
+  - lannoitus
+  - lämpötilan ja kosteuden
   
-Määrä
-  kastelu
-  lannoitus
+- #Määrä
+  - kastelu
+  - lannoitus
 
-Raja-arvo mullan kastelulle
+- Raja-arvo mullan kastelulle
