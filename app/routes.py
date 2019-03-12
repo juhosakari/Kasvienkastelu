@@ -1,19 +1,19 @@
 from app import app
-from flask import
+from flask import redirect, url_for, render_template, request
 from flask_login import current_user, logout_user, login_user, login_required
 from app.models import User
 
 @app.route('/')
-@app.route('/change_user', methods=['POST'])
-def change_user(user):
+@app.route('/change_user', methods=['POST', 'GET'])
+def change_user():
 	if request.method == 'POST':
 		if current_user.is_authenticated:
 			logout_user()
-		user = User.query.filter_by(name=user).first()
+		user = User.query.filter_by(name=request.form['user_button']).first()
 		login_user(user, remember=True)
-		return redirect(url_for('index', user=user))
+		return redirect(url_for('index', user=current_user.name))
 	else:
-		return url_for('change_user')
+		return render_template('change_user.html')
 
 @app.route('/index/<user>')
 @login_required

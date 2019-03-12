@@ -1,7 +1,6 @@
+{% extends "runko.html" %}
 <!-- poista nämä rivit/lisää oikeaan tiedostoon-->
-<meta charset="utf-8">
-<link rel="stylesheet" href="only_css_file.css">
-
+{% block asiat %}
 <div class="body_div">
 
 <h2>Asetukset</h2>
@@ -10,7 +9,7 @@
 <br>
 
 <div class="container">
-<form action="LISÄÄ TÄHÄN JUHO" method="post">
+<form action="{{ url_for('settings') }}" method="post">
 	<h3>Väliaika-arvot</h3>
 	<a>Aika lannoituksien välillä </a><input type="text" value="nykyinen arvo">
 	<br> <br>
@@ -28,3 +27,5 @@
 </div>
 
 </div>
+
+{% endblock asiat %}

@@ -1,8 +1,10 @@
 {% extends "runko.html" %}
 {% block asiat %}
 <h1><center>Valitse käyttäjä</center></h1><br>
-<a href="{{ url_for('index', user=account1) }}">Käyttäjä 1</a><br>
-<a href="{{ url_for('index', user=account2) }}">Käyttäjä 2</a><br>
-<a href="{{ url_for('index', user=account3) }}">Käyttäjä 3</a><br>
-<a href="{{ url_for('index', user=account4) }}">Käyttäjä 4</a><br>
+<form action="{{ url_for('change_user') }}" method="post">
+    <input type="submit" name="user_button" value="kayttaja1">
+	<input type="submit" name="user_button" value="kayttaja2">
+	<input type="submit" name="user_button" value="kayttaja3">
+	<input type="submit" name="user_button" value="kayttaja4">
+</form>
 {% endblock asiat %}

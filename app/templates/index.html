@@ -1,4 +1,6 @@
 {% extends "runko.html" %}
 {% block asiat %}
 <h1>Tere {{ user }}</h1>
+	<a href="{{ url_for('settings') }}">Settings</a><br>
+	<a href="{{ url_for('change_user') }}">Change user</a>
 {% endblock asiat %}
