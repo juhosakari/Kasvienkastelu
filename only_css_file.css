@@ -1,0 +1,36 @@
+/* ÄLÄ KOSKE */
+.body_div {
+	width: 40%;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* KOSKE */
+.body_div * {
+	width: 100%;
+  	font-family: "Arial", sans, sans-serif;
+}
+
+
+.container * {
+	border-radius: 5px;
+	border: none;
+}
+
+.container input {
+	border: 1px solid black;
+  	box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.1);
+  	height: 2em;
+  	-webkit-transition: .18s ease-out;
+  	-moz-transition: .18s ease-out;
+  	-o-transition: .18s ease-out;
+  	transition: .18s ease-out;
+}
+
+.container input:focus {
+  	box-shadow: inset 1px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.container .submit {
+  width: unset;
+}
