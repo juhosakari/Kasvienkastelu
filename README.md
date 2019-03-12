@@ -2,7 +2,7 @@
 Munkan kasvienkastelu projekti
 
 väliaika
-  kuvan otto
+  - kuvan otto
   lannoitus
   lämpötilan ja kosteuden
   
