@@ -1,12 +1,12 @@
 ## Kasvienkastelu
 Munkan kasvienkastelu projekti
 
-- #väliaika
+- väliaika
   - kuvan otto
   - lannoitus
   - lämpötilan ja kosteuden
   
-- #Määrä
+- Määrä
   - kastelu
   - lannoitus
 
