@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from flask import redirect, url_for, render_template, request
 from flask_login import current_user, logout_user, login_user, login_required
 from app.models import User
@@ -18,6 +18,8 @@ def change_user():
 @app.route('/index/<user>')
 @login_required
 def index(user):
+	user_ = User.query.filter_by(name=user).first()
+	print(user_.snap_i)
 	return render_template('index.html', user=user)
 
 @app.route('/autowater')
@@ -29,6 +31,14 @@ def autofertilize():
 	#todo
 	return redirect(url_for('index'))
 
-@app.route('/settings')
+@app.route('/settings', methods=['POST', 'GET'])
+@login_required
 def settings():
-	return render_template('settings.html')
+	if request.method == 'POST':
+		user = User.query.filter_by(name=current_user.name).first()
+		try:
+			user.snap_i = int(request.form['snap_i'])
+		except:
+			pass
+		db.session.commit()
+	return render_template('settings.html', user=current_user)

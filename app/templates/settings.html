@@ -11,16 +11,16 @@
 <div class="container">
 <form action="{{ url_for('settings') }}" method="post">
 	<h3>Väliaika-arvot</h3>
-	<a>Aika lannoituksien välillä </a><input type="text" value="nykyinen arvo">
+	<a>Aika lannoituksien välillä </a><input type="text" name="fertilize_i" value="nykyinen arvo">
 	<br> <br>
-	<a>Aika automaattisten kasteluiden välillä </a><input type="text" value="nykyinen arvo" >
+	<a>Aika automaattisten kasteluiden välillä </a><input type="text" name="water_i" value="nykyinen arvo" >
 	<br> <br>
-	<a>Aika kuvien ottamisen välillä </a><input type="text" value="nykyinen arvo" >
+	<a>Aika kuvien ottamisen välillä </a><input type="text" name="snap_i" value="{{ current_user.snap_i }}" >
 	<br> <br>
-	<h3>Lannoitus & kastelu</h3>
-	<a>Kastelun määrä </a><input type="text" value="nykyinen arvo" >
+	<h3>Lannoitus &#38; kastelu</h3>
+	<a>Kastelun määrä </a><input type="text" name="water_amount" value="nykyinen arvo" >
 	<br> <br>
-	<a>Lannoituksen määrä </a><input type="text" value="nykyinen arvo" >
+	<a>Lannoituksen määrä </a><input type="text" name="fertilize_amount" value="nykyinen arvo" >
 	<br> <br>
 	<input class="submit" type="submit" value="päivitä arvot"/>
 </form>

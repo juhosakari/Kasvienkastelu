@@ -1,8 +1,8 @@
-"""koko datapohjan lisaaminen
+"""empty message
 
-Revision ID: 10015e399e0e
+Revision ID: cb303d20138b
 Revises: 
-Create Date: 2019-03-12 20:46:43.223748
+Create Date: 2019-03-14 15:23:20.905249
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '10015e399e0e'
+revision = 'cb303d20138b'
 down_revision = None
 branch_labels = None
 depends_on = None
