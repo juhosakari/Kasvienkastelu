@@ -1,7 +1,6 @@
 {% extends "runko.html" %}
 <!-- poista nämä rivit/lisää oikeaan tiedostoon-->
 {% block asiat %}
-<div class="body_div">
 
 <h2>Asetukset</h2>
 <a>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</a>
@@ -11,17 +10,20 @@
 <div class="container">
 <form action="{{ url_for('settings') }}" method="post">
 	<h3>Väliaika-arvot</h3>
-	<a>Aika lannoituksien välillä </a><input type="text" name="fertilize_i" value="nykyinen arvo">
+	<a>Aika lannoituksien välillä </a><input type="text" name="fertilizing_i" value="{{ current_user.fertilizing_i }}">
 	<br> <br>
-	<a>Aika automaattisten kasteluiden välillä </a><input type="text" name="water_i" value="nykyinen arvo" >
+	<a>Mullan kuivuus jolloin kasvi kastellaan</a><input type="text" name="water_treshold" value="{{ current_user.water_treshold }}" >
 	<br> <br>
 	<a>Aika kuvien ottamisen välillä </a><input type="text" name="snap_i" value="{{ current_user.snap_i }}" >
 	<br> <br>
 	<h3>Lannoitus &#38; kastelu</h3>
-	<a>Kastelun määrä </a><input type="text" name="water_amount" value="nykyinen arvo" >
+	<a>Kastelun määrä </a><input type="text" name="water_amount" value="{{ current_user.water_amount }}" >
 	<br> <br>
-	<a>Lannoituksen määrä </a><input type="text" name="fertilize_amount" value="nykyinen arvo" >
+	<a>Lannoituksen määrä </a><input type="text" name="fertilize_amount" value="{{ current_user.fertilize_amount }}" >
 	<br> <br>
+	{% if error %}
+         <p>Virhe:</p> {{ error }}
+     {% endif %}
 	<input class="submit" type="submit" value="päivitä arvot"/>
 </form>
 </div>

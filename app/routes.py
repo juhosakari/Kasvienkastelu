@@ -18,9 +18,7 @@ def change_user():
 @app.route('/index/<user>')
 @login_required
 def index(user):
-	user_ = User.query.filter_by(name=user).first()
-	print(user_.snap_i)
-	return render_template('index.html', user=user)
+	return render_template('index.html', user=current_user)
 
 @app.route('/autowater')
 def autowater():
@@ -34,11 +32,17 @@ def autofertilize():
 @app.route('/settings', methods=['POST', 'GET'])
 @login_required
 def settings():
+	error = False
 	if request.method == 'POST':
-		user = User.query.filter_by(name=current_user.name).first()
+		#user = User.query.filter_by(name=current_user.name).first()
 		try:
-			user.snap_i = int(request.form['snap_i'])
+			current_user.snap_i = int(request.form['snap_i'])
+			current_user.fertilizing_i = int(request.form['fertilizing_i'])
+			current_user.water_treshold = int(request.form['water_treshold'])
+			current_user.water_amount = int(request.form['water_amount'])
+			current_user.fertilize_amount = int(request.form['fertilize_amount'])
 		except:
-			pass
+			error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
 		db.session.commit()
-	return render_template('settings.html', user=current_user)
+		return redirect(url_for('index', user=current_user.name))
+	return render_template('settings.html', current_user=current_user, error=error)
