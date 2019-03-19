@@ -22,12 +22,30 @@ def index(user):
 
 @app.route('/autowater')
 def autowater():
-	return redirect(url_for('index'))
+	'''
+	running = False
+    if toggle == "ON":
+        for process in psutil.process_iter():
+            try:
+                if process.cmdline()[1] == 'auto_water.py':
+                    running = True
+                    break
+            except:
+                pass
+        if not running:
+            os.system("python3.4 auto_water.py&")
+    else:
+        templateData = template(text = "Auto Watering Off")
+		os.system("pkill -f water.py")
+	'''
+	return redirect(url_for('index', user=current_user))
 
-@app.route('/autofertilize')
+
+
+@app.route('/autofertilize') 
 def autofertilize():
 	#todo
-	return redirect(url_for('index'))
+	return redirect(url_for('index', user=current_use))
 
 @app.route('/settings', methods=['POST', 'GET'])
 @login_required
@@ -43,6 +61,7 @@ def settings():
 			current_user.fertilize_amount = int(request.form['fertilize_amount'])
 		except:
 			error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
+			return render_template('settings.html', current_user=current_user, error=error)
 		db.session.commit()
 		return redirect(url_for('index', user=current_user.name))
 	return render_template('settings.html', current_user=current_user, error=error)
