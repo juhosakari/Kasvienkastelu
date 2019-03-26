@@ -1,8 +1,8 @@
-"""empty message
+"""Luo datapohja
 
-Revision ID: cb303d20138b
+Revision ID: 864e9342e7f0
 Revises: 
-Create Date: 2019-03-14 15:23:20.905249
+Create Date: 2019-03-26 15:40:41.287311
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cb303d20138b'
+revision = '864e9342e7f0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,23 +22,12 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=True),
     sa.Column('snap_i', sa.Integer(), nullable=True),
-    sa.Column('fertilizing_i', sa.Integer(), nullable=True),
     sa.Column('humidity_temp_i', sa.Integer(), nullable=True),
-    sa.Column('water_treshold', sa.Integer(), nullable=True),
     sa.Column('water_amount', sa.Integer(), nullable=True),
-    sa.Column('fertilize_amount', sa.Integer(), nullable=True),
     sa.Column('autowater', sa.Boolean(), nullable=True),
-    sa.Column('autofertilize', sa.Boolean(), nullable=True),
+    sa.Column('fertilized', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
-    )
-    op.create_table('fertilize',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('amount_fertilized', sa.Integer(), nullable=True),
-    sa.Column('timestamp', sa.Integer(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('humidity_temp',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -77,6 +66,5 @@ def downgrade():
     op.drop_index(op.f('ix_pics_date'), table_name='pics')
     op.drop_table('pics')
     op.drop_table('humidity_temp')
-    op.drop_table('fertilize')
     op.drop_table('user')
     # ### end Alembic commands ###

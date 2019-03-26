@@ -56,9 +56,7 @@ def settings():
 		try:
 			current_user.snap_i = int(request.form['snap_i'])
 			current_user.fertilizing_i = int(request.form['fertilizing_i'])
-			current_user.water_treshold = int(request.form['water_treshold'])
 			current_user.water_amount = int(request.form['water_amount'])
-			current_user.fertilize_amount = int(request.form['fertilize_amount'])
 		except:
 			error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
 			return render_template('settings.html', current_user=current_user, error=error)
