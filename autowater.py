@@ -15,8 +15,8 @@ def main():
 	SERVO_2 = 0
 	HUMIDITY_TEMP = 0
 
-	while:
+	while True:
 		users = get_values()
 
 
-main()
+get_values()

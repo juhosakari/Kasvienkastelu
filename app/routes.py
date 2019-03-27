@@ -6,14 +6,13 @@ from app.models import User
 @app.route('/')
 @app.route('/change_user', methods=['POST', 'GET'])
 def change_user():
+	logout_user()
 	if request.method == 'POST':
-		if current_user.is_authenticated:
-			logout_user()
 		user = User.query.filter_by(name=request.form['user_button']).first()
 		login_user(user, remember=True)
 		return redirect(url_for('index', user=current_user.name))
 	else:
-		return render_template('change_user.html')
+		return render_template('change_user.html', user=current_user)
 
 @app.route('/index/<user>')
 @login_required
@@ -55,11 +54,12 @@ def settings():
 		#user = User.query.filter_by(name=current_user.name).first()
 		try:
 			current_user.snap_i = int(request.form['snap_i'])
-			current_user.fertilizing_i = int(request.form['fertilizing_i'])
 			current_user.water_amount = int(request.form['water_amount'])
+			#current_user.autowater = int(request.form['autowater'])
+			current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
 		except:
 			error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
 			return render_template('settings.html', current_user=current_user, error=error)
 		db.session.commit()
 		return redirect(url_for('index', user=current_user.name))
-	return render_template('settings.html', current_user=current_user, error=error)
+	return render_template('settings.html', user=current_user, error=error)

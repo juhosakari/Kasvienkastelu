@@ -2,7 +2,17 @@
  <head>
  	<meta charset="utf-8">
 	<link rel="stylesheet" href="{{ url_for('static', filename='only_css_file.css') }}">
- 	<title>{{ title }}</title>
+ 	<title>Raspberry pi</title>
+ 	{% if current_user.is_authenticated %}
+ 	<h2>Linkit</h2>
+ 	<h3>kirjautunut: {{ current_user.name }} </h3>
+	<ul>
+	<li><a href="{{ url_for('index', user=current_user.name) }}">Pääsivu</a></li>
+	<li><a href="{{ url_for('change_user') }}">Vaihda käyttäjää</a></li>
+	<li><a href="{{ url_for('settings') }}">Asetukset</a></li>
+	<a></a>
+	</ul>
+	{% endif %}
  </head>
  <body>
  	<div class="body_div">

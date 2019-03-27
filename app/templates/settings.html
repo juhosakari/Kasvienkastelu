@@ -1,33 +1,36 @@
-{% extends "runko.html" %}
-<!-- poista nämä rivit/lisää oikeaan tiedostoon-->
+{% extends 'runko.html' %}
+
 {% block asiat %}
+<body style="margin-right: 20%;">
 
+<h1>Asetukset</h1>
 
-<h2>Asetukset</h2>
-<a>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</a>
-<br>
-<br>
+<p>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</p>
 
+<h2>Väliaika-arvot</h2>
 <div class="container">
-<form action="{{ url_for('settings') }}" method="post">
-	<h3>Väliaika-arvot</h3>
-	<a>Aika lannoituksien välillä </a><input type="text" name="fertilizing_i" value="{{ current_user.fertilizing_i }}">
-	<br> <br>
-	<a>Mullan kuivuus jolloin kasvi kastellaan</a><input type="text" name="water_treshold" value="{{ current_user.water_treshold }}" >
-	<br> <br>
-	<a>Aika kuvien ottamisen välillä </a><input type="text" name="snap_i" value="{{ current_user.snap_i }}" >
-	<br> <br>
-	<h3>Lannoitus &#38; kastelu</h3>
-	<a>Kastelun määrä </a><input type="text" name="water_amount" value="{{ current_user.water_amount }}" >
-	<br> <br>
-	<a>Lannoituksen määrä </a><input type="text" name="fertilize_amount" value="{{ current_user.fertilize_amount }}" >
-	<br> <br>
-	{% if error %}
-         <p>Virhe:</p> {{ error }}
-     {% endif %}
-	<input class="submit" type="submit" value="päivitä arvot"/>
-</form>
-</div>
+  <form action="" method="post">
+    <!--
+    <p>Aika lannoituksien välillä </p><input type="text" value="nykyinen arvo">
+    <br>
+    <p>Aika automaattisten kasteluiden välillä </p><input type="text" value="nykyinen arvo" >
+    <br>
+    -->
+    <p>Aika kuvien ottamisen välillä </p><input type="text" name="snap_i" value="{{ user.snap_i }}" >
+    <br>
+    <p>Aika lämpötilan ja kosetuden mittausten välillä </p><input type="text" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
+    <br>
+    <h2>Lannoitus & kastelu</h2>
+    <p>Kastelun määrä yhdellä kerralla </p><input type="text" name="water_amount" value="{{ user.water_amount }}" >
+    <br>
+    <p>Automaattinen kastelu </p><input type="text" name="autowater" value="{{ user.autowater }}" >
+    <br>
+    <br>
+    {% if error %}
+        <p>Virhe:</p> {{ error }}
+    {% endif %}
+    <input class="submit" type="submit" value="päivitä arvot"/>
+    </form>
+  </div>
 
-</div>
 {% endblock asiat %}

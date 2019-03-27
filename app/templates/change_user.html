@@ -1,10 +1,20 @@
-{% extends "runko.html" %}
+{% extends 'runko.html' %}
+
 {% block asiat %}
-<h1><center>Valitse käyttäjä</center></h1><br>
+<h1>Raspberry pi:n ohjauspaneeli</h1>
+<h2>Valitse käyttäjä</h2>
 <form action="{{ url_for('change_user') }}" method="post">
     <input type="submit" name="user_button" value="kayttaja1">
 	<input type="submit" name="user_button" value="kayttaja2">
 	<input type="submit" name="user_button" value="kayttaja3">
 	<input type="submit" name="user_button" value="kayttaja4">
 </form>
+<!--
+<ul>
+<li><a href="/asd/">käyttäjä #</a></li>
+<li><a href="/asd/">käyttäjä #</a></li>
+<li><a href="/asd/">käyttäjä #</a></li>
+<li><a href="/asd/">käyttäjä #</a></li>
+</ul>
+-->
 {% endblock asiat %}
