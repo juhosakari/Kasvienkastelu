@@ -2,6 +2,7 @@ from app import app, db
 from flask import redirect, url_for, render_template, request
 from flask_login import current_user, logout_user, login_user, login_required
 from app.models import User
+import datetime
 
 @app.route('/')
 @app.route('/change_user', methods=['POST', 'GET'])
@@ -17,7 +18,11 @@ def change_user():
 @app.route('/index/<user>')
 @login_required
 def index(user):
-	return render_template('index.html', user=current_user)
+	return render_template('index.html', 
+						   user=current_user, 
+						   time=datetime.datetime.now().strftime("%H:%M %d.%m.%Y"),
+						   #last_watered=User.query
+						   )
 
 @app.route('/autowater')
 def autowater():

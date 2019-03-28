@@ -4,17 +4,13 @@
 <h1>Raspberry pi:n ohjauspaneeli</h1>
 <h2>Valitse käyttäjä</h2>
 <form action="{{ url_for('change_user') }}" method="post">
-    <input type="submit" name="user_button" value="kayttaja1">
-	<input type="submit" name="user_button" value="kayttaja2">
-	<input type="submit" name="user_button" value="kayttaja3">
-	<input type="submit" name="user_button" value="kayttaja4">
+    <button type="submit" name="user_button" value="kayttaja1">Kayttaja1</button>
+    <br>
+	<button type="submit" name="user_button" value="kayttaja2">kayttaja2</button>
+	<br>
+	<button type="submit" name="user_button" value="kayttaja3">kayttaja3</button>
+	<br>
+	<button type="submit" name="user_button" value="kayttaja4">kayttaja4</button>
+	<br>
 </form>
-<!--
-<ul>
-<li><a href="/asd/">käyttäjä #</a></li>
-<li><a href="/asd/">käyttäjä #</a></li>
-<li><a href="/asd/">käyttäjä #</a></li>
-<li><a href="/asd/">käyttäjä #</a></li>
-</ul>
--->
 {% endblock asiat %}

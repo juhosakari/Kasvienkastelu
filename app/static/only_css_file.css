@@ -59,3 +59,17 @@ table * {
   font-weight:0;
   text-align: left;
 }
+button {
+  width: 10%;
+  min-width:40px;
+  background: #fff;
+  color: #23a1ef;
+  border: 1px solid #23a1ef;
+  padding: 5px;
+  margin: 5px;
+  margin-left,margin-right:0px;
+}
+button:hover {
+  background: #23a1ef;
+  color: #fff;
+}

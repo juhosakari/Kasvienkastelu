@@ -2,6 +2,10 @@ def get_values():
 	users = User.query.all()
 	return users
 
+def get_status(pin):
+    GPIO.setup(pin, GPIO.IN) 
+    return GPIO.input(pin)
+
 def main():
 	from app import db
 	from app.models import User, Pics, Water, Fertilize, Humidity_temp
@@ -17,6 +21,8 @@ def main():
 
 	while True:
 		users = get_values()
+		for user in users:
+			
 
 
 get_values()
