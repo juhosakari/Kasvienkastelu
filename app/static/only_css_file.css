@@ -61,7 +61,7 @@ table * {
 }
 button {
   width: 10%;
-  min-width:40px;
+  min-width:100px;
   background: #fff;
   color: #23a1ef;
   border: 1px solid #23a1ef;
