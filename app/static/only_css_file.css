@@ -10,6 +10,9 @@ body * {
 * {
   font-family: "Arial", sans, sans-serif;
 }
+h1 {
+  padding-top: 30px;
+}
 h1,h2,h3 {
   color: #23a1ef;
 }
