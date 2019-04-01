@@ -2,13 +2,13 @@
  <head>
  	<meta charset="utf-8">
 	<link rel="stylesheet" href="{{ url_for('static', filename='only_css_file.css') }}">
- 	<title>Raspberry pi</title>
+  <link rel="shortcut icon"
+ href="{{ url_for('static', filename='favicon.ico') }}">
+ 	<title>MYK kastelujärjestelmä</title>
  </head>
  <body>
- <div class="body_div">
  	{% block asiat %}
  	{% endblock asiat %}
- </div>
  	{% if current_user.is_authenticated %}
  	<p>kirjautunut: {{ current_user.name }} </p>
  	<h2>Linkit</h2>
