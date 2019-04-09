@@ -18,9 +18,15 @@ def change_user():
 @app.route('/index/<user>')
 @login_required
 def index(user):
+	last_measure = current_user.humidity_temp.order_by(humidity_temp.timestamp.desc()).first_or_404()
+	last_water = current_user.water.order_by(water.timestamp.desc()).first_or_404()
 	return render_template('index.html', 
 						   user=current_user, 
 						   time=datetime.datetime.now().strftime("%H:%M %d.%m.%Y"),
+						   temphum_timestamp=last_measure.timestamp,
+						   water_timestamp=last_water.timestamp,
+						   temp=last_measure.temp,
+						   humidity=last_measure.humidity
 						   #last_watered=User.query
 						   )
 

@@ -29,18 +29,18 @@ class User(db.Model, UserMixin):
 class Pics(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	path = db.Column(db.String(64), index=True, unique=True)
-	date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	date = db.Column(db.DateTime, index=True ,default=datetime.utcnow)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Water(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	amount_watered = db.Column(db.Integer)
-	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+	timestamp = db.Column(db.DateTime,index=True , default=datetime.utcnow)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Humidity_temp(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	humidity = db.Column(db.Integer)
 	temp = db.Column(db.Integer)
-	timestamp = db.Column(db.Integer, default=datetime.utcnow)
+	timestamp = db.Column(db.Integer,index=True, default=datetime.utcnow)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

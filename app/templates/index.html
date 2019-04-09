@@ -11,16 +11,16 @@ Raspberry pi:n ohjauspaneeli
 <h2>Perustietoa</h2>
 <table style="">
 <tr>
-  <td>Humidity and Temperature measured at 00:00</td>
-  <td>value</td>
+  <td>Humidity and Temperature measured at {{ temphum_timestamp }}</td>
+  <td class = "left">temperature: {{ temp }} humidity: {{ humidity }}</td>
 </tr>
 <tr>
   <td>Last watered</td>
-  <td>value</td>
+  <td class = "left">{{ water_timestamp }}</td>
 </tr>
 <tr>
   <td>Time</td>
-  <td>{{ time }}</td>
+  <td class = "left">{{ time }}</td>
 </tr>
 </table>
 
@@ -28,23 +28,23 @@ Raspberry pi:n ohjauspaneeli
 <table style="">
 <tr>
   <td>Humitidy and temperature measuring interval</td>
-  <td>{{ user.humidity_temp_i }}</td>
+  <td class = "left">{{ user.humidity_temp_i }}</td>
 </tr>
 <tr>
   <td>Fertilized</td>
-  <td>{{ user.fertilized }}</td>
+  <td class = "left">{{ user.fertilized }}</td>
 </tr>
 <tr>
   <td>Picture taking interval</td>
-  <td>{{ user.snap_i }}</td>
+  <td class = "left">{{ user.snap_i }}</td>
 </tr>
 <tr>
   <td>Amount to water at one instance</td>
-  <td>{{ user.water_amount }}</td>
+  <td class = "left">{{ user.water_amount }}</td>
 </tr>
 <tr>
   <td>Autowater</td>
-  <td>{{ current_user.autowater }}</td>
+  <td class = "left">{{ current_user.autowater }}</td>
 </tr>
 </table>
 
