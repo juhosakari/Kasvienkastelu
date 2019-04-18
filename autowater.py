@@ -2,6 +2,7 @@ from app import db
 from app.models import User, Pics, Water, Humidity_temp
 import RPi.GPIO as GPIO
 import datetime
+from picamera import PiCamera
 import time
 import DHT22
 import pigpio
@@ -23,8 +24,8 @@ def water(pump_pin, servo_pin, sensor_pin, user):
 
 
 def temphum(user):
-	last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first_or_404()
-	if datetime.utcnow -last_measure.timestamp >= user.humidity_temp_i:
+	last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
+	if last_measure == None or datetime.utcnow -last_measure.timestamp >= user.humidity_temp_i:
 		pi=pigpio.pi()
 		datapin=4
     	s=DHT22.sensor(pi,datapin)
@@ -39,7 +40,18 @@ def temphum(user):
     	db.session.commit()
 
 def snap(user):
-	pass
+	last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
+	'''
+	100% keskeneräinen
+	if last_snap == None or datetime.utcnow -last_snap.timestamp >= user.snap_i:
+		with open("/home/pi/GOIT Plant watering/webapp/static/index") as f:
+        	i=f.readline()
+    	os.remove("/home/pi/GOIT Plant watering/webapp/static/index")
+    	with open("/home/pi/GOIT Plant watering/webapp/static/index","w") as f:
+    	    f.write(str(int(i)+1))
+    	with PiCamera() as camera:
+        	camera.capture('/home/pi/GOIT Plant watering/webapp/static/picture'+str(int(i)+1)+'.jpg')
+    '''
 
 def main():
 	#Raspberry pi gpio pins

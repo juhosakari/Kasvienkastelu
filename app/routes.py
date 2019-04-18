@@ -1,8 +1,10 @@
 from app import app, db
 from flask import redirect, url_for, render_template, request
 from flask_login import current_user, logout_user, login_user, login_required
-from app.models import User
+from app.models import User, Humidity_temp, Water, Pics
 import datetime
+
+import pdb
 
 @app.route('/')
 @app.route('/change_user', methods=['POST', 'GET'])
@@ -18,16 +20,35 @@ def change_user():
 @app.route('/index/<user>')
 @login_required
 def index(user):
-	last_measure = current_user.humidity_temp.order_by(humidity_temp.timestamp.desc()).first_or_404()
-	last_water = current_user.water.order_by(water.timestamp.desc()).first_or_404()
+	#pdb.set_trace()
+	print("Current user: ", current_user)
+	
+	last_measure = current_user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
+	last_water = current_user.water.order_by(Water.timestamp.desc()).first()
+	last_pic = current_user.pics.order_by(Pics.date.desc()).first()
+
+	if last_measure is None or last_water is None:
+		return render_template('index.html', user=current_user, 
+						   time=datetime.datetime.now().strftime("%H:%M %d.%m.%Y"),
+						   temphum_timestamp="None",
+						   water_timestamp="None",
+						   temp="None",
+						   humidity="None",
+						   water_amount="None",
+						   pic_path="lammas.jpg",
+						   pic_timestamp="None"
+						   )
+
 	return render_template('index.html', 
 						   user=current_user, 
 						   time=datetime.datetime.now().strftime("%H:%M %d.%m.%Y"),
 						   temphum_timestamp=last_measure.timestamp,
 						   water_timestamp=last_water.timestamp,
 						   temp=last_measure.temp,
-						   humidity=last_measure.humidity
-						   #last_watered=User.query
+						   humidity=last_measure.humidity,
+						   water_amount=last_water.water_amount,
+						   pic_path=last_pic.path,
+						   pic_timestamp=last_pic.timestamp
 						   )
 
 @app.route('/autowater')
