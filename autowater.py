@@ -1,5 +1,6 @@
 from app import db
 from app.models import User, Pics, Water, Humidity_temp
+from flask_login import current_user
 import RPi.GPIO as GPIO
 import datetime
 from picamera import PiCamera
@@ -41,17 +42,15 @@ def temphum(user):
 
 def snap(user):
 	last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
-	'''
-	100% keskeneräinen
 	if last_snap == None or datetime.utcnow -last_snap.timestamp >= user.snap_i:
-		with open("/home/pi/GOIT Plant watering/webapp/static/index") as f:
-        	i=f.readline()
-    	os.remove("/home/pi/GOIT Plant watering/webapp/static/index")
-    	with open("/home/pi/GOIT Plant watering/webapp/static/index","w") as f:
-    	    f.write(str(int(i)+1))
+		pic = Pics(author=current_user, post_pic_path="random")
+		y = Pics.query.order_by(Pics.timestamp.desc()).first()
+		filename = "post" + str(y.id) + ".png"
     	with PiCamera() as camera:
-        	camera.capture('/home/pi/GOIT Plant watering/webapp/static/picture'+str(int(i)+1)+'.jpg')
-    '''
+        	camera.capture('app/static/'+ filename)
+        pic.path = filename
+        db.session.add(pic)
+        db.session.commit()
 
 def main():
 	#Raspberry pi gpio pins
@@ -82,3 +81,5 @@ def main():
 			snap(user)
 	except KeyboardInterrupt:
 		GPIO.cleanup()
+
+main()

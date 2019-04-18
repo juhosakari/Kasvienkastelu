@@ -51,32 +51,38 @@ def index(user):
 						   pic_timestamp=last_pic.timestamp
 						   )
 
+#Kannattaako autowater laittaa linkiksi vai asetuksiin yhdeksi formin osaksi?
 @app.route('/autowater')
 def autowater():
-	'''
-	running = False
-    if toggle == "ON":
+    if current_user.autowater == False:
+    	'''
         for process in psutil.process_iter():
             try:
-                if process.cmdline()[1] == 'auto_water.py':
+                if process.cmdline()[1] == 'autowater.py':
                     running = True
                     break
             except:
                 pass
         if not running:
-            os.system("python3.4 auto_water.py&")
+            os.system("python3.4 autowater.py&")
+        '''
+        os.system("python3.4 autowater.py&")
+        current_user.autowater = True
     else:
-        templateData = template(text = "Auto Watering Off")
-		os.system("pkill -f water.py")
-	'''
-	return redirect(url_for('index', user=current_user))
+		os.system("pkill -f autowater.py")
+		current_user.autowater = False
+	return redirect(url_for('settings', user=current_user))
 
 
-
+'''
 @app.route('/autofertilize') 
 def autofertilize():
-	#todo
-	return redirect(url_for('index', user=current_use))
+	if current_user.fertilized:
+		current_user.fertilized = False
+	else:
+		current_user.fertilized = True
+	return redirect(url_for('settings', user=current_use))
+'''
 
 @app.route('/settings', methods=['POST', 'GET'])
 @login_required
