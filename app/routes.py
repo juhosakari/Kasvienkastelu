@@ -3,6 +3,7 @@ from flask import redirect, url_for, render_template, request
 from flask_login import current_user, logout_user, login_user, login_required
 from app.models import User, Humidity_temp, Water, Pics
 import datetime
+import socket
 
 import pdb
 
@@ -21,8 +22,6 @@ def change_user():
 @login_required
 def index(user):
 	#pdb.set_trace()
-	print("Current user: ", current_user)
-	
 	last_measure = current_user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
 	last_water = current_user.water.order_by(Water.timestamp.desc()).first()
 	last_pic = current_user.pics.order_by(Pics.date.desc()).first()
@@ -52,10 +51,7 @@ def index(user):
 						   )
 
 #Kannattaako autowater laittaa linkiksi vai asetuksiin yhdeksi formin osaksi?
-@app.route('/autowater')
-def autowater():
-    if current_user.autowater == False:
-    	'''
+'''
         for process in psutil.process_iter():
             try:
                 if process.cmdline()[1] == 'autowater.py':
@@ -66,9 +62,12 @@ def autowater():
         if not running:
             os.system("python3.4 autowater.py&")
         '''
-        os.system("python3.4 autowater.py&")
-        current_user.autowater = True
-    else:
+@app.route('/autowater')
+def autowater():
+	if current_user.autowater == False:
+		os.system("python3.4 autowater.py&")
+		current_user.autowater = True
+	else:
 		os.system("pkill -f autowater.py")
 		current_user.autowater = False
 	return redirect(url_for('settings', user=current_user))
@@ -88,16 +87,20 @@ def autofertilize():
 @login_required
 def settings():
 	error = False
-	if request.method == 'POST':
-		#user = User.query.filter_by(name=current_user.name).first()
-		try:
-			current_user.snap_i = int(request.form['snap_i'])
-			current_user.water_amount = int(request.form['water_amount'])
-			#current_user.autowater = int(request.form['autowater'])
-			current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
-		except:
-			error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
-			return render_template('settings.html', current_user=current_user, error=error)
-		db.session.commit()
-		return redirect(url_for('index', user=current_user.name))
-	return render_template('settings.html', user=current_user, error=error)
+	s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+	s.connect(('8.8.8.8',80))
+	if s.getsockname()[0] == request.remote_addr:
+		if request.method == 'POST':
+			#user = User.query.filter_by(name=current_user.name).first()
+			try:
+				current_user.snap_i = int(request.form['snap_i'])
+				current_user.water_amount = int(request.form['water_amount'])
+				#current_user.autowater = int(request.form['autowater'])
+				current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
+			except:
+				error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
+				return render_template('settings.html', current_user=current_user, error=error)
+			db.session.commit()
+			return redirect(url_for('index', user=current_user.name))
+		return render_template('settings.html', user=current_user, error=error)
+	return redirect(url_for('index', user=current_user.name))
