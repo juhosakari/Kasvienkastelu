@@ -17,7 +17,7 @@ def get_status(pin):
 def water(pump_pin, servo_pin, sensor_pin, user):
 	if GPIO.input(sensor_pin):
 		GPIO.output(pump_pin, GPIO.HIGH)
-		time.sleep(1)
+		time.sleep(user.water_amount)
 		GPIO.output(pump_pin, GPIO.LOW)
 		water = Humidity_temp(amount_watered=user.water_amount)
     	db.session.add(measure)
@@ -79,6 +79,7 @@ def main():
 				water(pump_pin, servo_pin, WATER_SENSOR, user)
 			temphum(user)
 			snap(user)
+			#time.sleep(1)
 	except KeyboardInterrupt:
 		GPIO.cleanup()
 
