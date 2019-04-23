@@ -11,8 +11,8 @@ import pigpio
 GPIO.setmode(GPIO.BCM)
 
 def get_status(pin):
-    GPIO.setup(pin, GPIO.IN) 
-    return GPIO.input(pin)
+	GPIO.setup(pin, GPIO.IN) 
+	return GPIO.input(pin)
 
 def water(pump_pin, servo_pin, sensor_pin, user):
 	if GPIO.input(sensor_pin):
@@ -20,8 +20,8 @@ def water(pump_pin, servo_pin, sensor_pin, user):
 		time.sleep(user.water_amount)
 		GPIO.output(pump_pin, GPIO.LOW)
 		water = Humidity_temp(amount_watered=user.water_amount)
-    	db.session.add(measure)
-    	db.session.commit()
+		db.session.add(measure)
+		db.session.commit()
 
 
 def temphum(user):
@@ -29,16 +29,16 @@ def temphum(user):
 	if last_measure == None or datetime.utcnow -last_measure.timestamp >= user.humidity_temp_i:
 		pi=pigpio.pi()
 		datapin=4
-    	s=DHT22.sensor(pi,datapin)
-    	s.trigger()
-    	sleep(2)
-    	t=s.humidity()
-    	h=s.temperature()
-    	s.cancel
-    	pi.stop()
-    	measure = Humidity_temp(humidity=h, temp=t)
-    	db.session.add(measure)
-    	db.session.commit()
+		s=DHT22.sensor(pi,datapin)
+		s.trigger()
+		sleep(2)
+		t=s.humidity()
+		h=s.temperature()
+		s.cancel
+		pi.stop()
+		measure = Humidity_temp(humidity=h, temp=t)
+		db.session.add(measure)
+		db.session.commit()
 
 def snap(user):
 	last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
@@ -46,11 +46,11 @@ def snap(user):
 		pic = Pics(author=current_user, post_pic_path="random")
 		y = Pics.query.order_by(Pics.timestamp.desc()).first()
 		filename = "post" + str(y.id) + ".png"
-    	with PiCamera() as camera:
-        	camera.capture('app/static/'+ filename)
-        pic.path = filename
-        db.session.add(pic)
-        db.session.commit()
+		with PiCamera() as camera:
+			camera.capture('app/static/'+ filename)
+		pic.path = filename
+		db.session.add(pic)
+		db.session.commit()
 
 def main():
 	#Raspberry pi gpio pins
@@ -68,7 +68,6 @@ def main():
 
 	try:
 		while True:
-			users = get_values()
 			for user in users:
 				if user.name == 'kayttaja1' or user.name == 'kayttaja3':
 					servo_pin = SERVO_1
