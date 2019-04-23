@@ -9,12 +9,6 @@
 <h2>Väliaika-arvot</h2>
 <div class="container">
   <form action="" method="post">
-    <!--
-    <p>Aika lannoituksien välillä </p><input type="text" value="nykyinen arvo">
-    <br>
-    <p>Aika automaattisten kasteluiden välillä </p><input type="text" value="nykyinen arvo" >
-    <br>
-    -->
     <p>Aika kuvien ottamisen välillä </p><input type="text" name="snap_i" value="{{ user.snap_i }}" >
     <br>
     <p>Aika lämpötilan ja kosetuden mittausten välillä </p><input type="text" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
@@ -22,7 +16,23 @@
     <h2>Lannoitus & kastelu</h2>
     <p>Kastelun määrä yhdellä kerralla </p><input type="text" name="water_amount" value="{{ user.water_amount }}" >
     <br>
-    <p>Automaattinen kastelu </p><input type="text" name="autowater" value="{{ user.autowater }}" >
+    <fieldset>
+        <legend>Automaattinen kastelu (päällä / pois) </legend>
+        <ul>
+          <li>
+            <label for="auto_0">
+              <span>päällä</span>
+            </label>
+            <input name="auto" id="auto_0" value="1" type="radio">
+          </li>
+          <li>
+            <label for="auto_1">
+              <span>pois</span>
+            </label>
+            <input name="auto" id="auto_1" value="0" type="radio" checked>
+          </li>
+        </ul>
+      </fieldset>
     <br>
     <br>
     {% if error %}
