@@ -4,8 +4,18 @@ from flask_login import current_user, logout_user, login_user, login_required
 from app.models import User, Humidity_temp, Water, Pics
 import datetime
 import socket
+import os
 
 import pdb
+
+def autowater():
+	if current_user.autowater == False:
+		os.system("python3 autowater.py&")
+		current_user.autowater = True
+	else:
+		os.system("pkill -f autowater.py")
+		current_user.autowater = False
+	return redirect(url_for('settings', user=current_user))
 
 @app.route('/')
 @app.route('/change_user', methods=['POST', 'GET'])
@@ -51,38 +61,6 @@ def index(user):
 						   )
 
 #Kannattaako autowater laittaa linkiksi vai asetuksiin yhdeksi formin osaksi?
-'''
-        for process in psutil.process_iter():
-            try:
-                if process.cmdline()[1] == 'autowater.py':
-                    running = True
-                    break
-            except:
-                pass
-        if not running:
-            os.system("python3.4 autowater.py&")
-        '''
-@app.route('/autowater')
-def autowater():
-	if current_user.autowater == False:
-		os.system("python3.4 autowater.py&")
-		current_user.autowater = True
-	else:
-		os.system("pkill -f autowater.py")
-		current_user.autowater = False
-	return redirect(url_for('settings', user=current_user))
-
-
-'''
-@app.route('/autofertilize') 
-def autofertilize():
-	if current_user.fertilized:
-		current_user.fertilized = False
-	else:
-		current_user.fertilized = True
-	return redirect(url_for('settings', user=current_use))
-'''
-
 @app.route('/settings', methods=['POST', 'GET'])
 @login_required
 def settings():
@@ -91,15 +69,17 @@ def settings():
 	s.connect(('8.8.8.8',80))
 	if s.getsockname()[0] == request.remote_addr:
 		if request.method == 'POST':
-			#user = User.query.filter_by(name=current_user.name).first()
 			try:
 				current_user.snap_i = int(request.form['snap_i'])
 				current_user.water_amount = int(request.form['water_amount'])
 				#current_user.autowater = int(request.form['autowater'])
 				current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
+				if int(request.form['auto']) != current_user.autowater:
+					autowater()
 			except:
 				error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
 				return render_template('settings.html', current_user=current_user, error=error)
+				
 			db.session.commit()
 			return redirect(url_for('index', user=current_user.name))
 		return render_template('settings.html', user=current_user, error=error)
