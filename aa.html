@@ -1,0 +1,110 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Asetukset</title>
+  <style>
+    input[type="number"] {
+      -moz-appearance:textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+    * {
+      font-family: verdana, sans-serif;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    form ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #000;
+    }
+    fieldset {
+      width: 350;
+    }
+    form {
+      width: 600;
+      border: 1px solid #666;
+      border-radius: 5px;
+      padding: 1em;
+      margin: 1em;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Asetukset</h1>
+  <p>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</p>
+  <form action="" method="post">
+    <h3>Väliaika-arvot</h3>
+    <p> 
+      <label for="time_0">
+        <span>Aika lannoituksien välillä (yksikkö)</span>
+      </label>
+      <input type="number" id="time_0" value="99999">
+    </p>
+    <p>
+      <label for="time_1">
+        <span>Aika automaattisten kasteluiden välillä (yksikkö)</span>
+      </label>
+      <input id="time_1" type="number" value="99999" >
+    </p>
+    <p>
+      <label for="time_2">
+        <span>Aika kuvien ottamisen välillä (yksikkö)</span>
+      </label>
+      <input id="time_2" type="number" value="99999" >
+    </p>
+    <h3>Lannoitus &amp; kastelu</h3>
+    <p>
+      <label for="amt_0">
+        <span>Kastelun määrä (yksikkö)</span>
+      </label>
+      <input id="amt_0" type="number" value="99999">
+    </p>
+    <p>
+      <label for"amt_1">
+        <span>Lannoituksen määrä (yksikkö)</span>
+      </label>
+      <input id="amt_1" type="number" value="99999" >
+    </p>
+    <p>
+      <fieldset>
+        <legend>Automaattinen kastelu (päällä / pois) </legend>
+        <ul>
+          <li>
+            <label for="auto_0">
+              <span>päällä</span>
+            </label>
+            <input name="auto" id="auto_0" value="on" type="radio">
+          </li>
+          <li>
+            <label for="auto_1">
+              <span>pois</span>
+            </label>
+            <input name="auto" id="auto_1" value="off" type="radio" checked>
+          </li>
+        </ul>
+      </fieldset>
+    </p>
+    <p>
+      <button type="submit"> Päivitä arvot </button>
+    </p>
+  </form>
+
+  <h2>Linkit</h2>
+  <ul>
+    <li>
+      <a href="index.php">Pääsivu</a>
+    </li>
+    <li>
+      <a href="log.php">Vaihda käyttäjää</a>
+    </li>
+  </ul>
+</body>
+</html>

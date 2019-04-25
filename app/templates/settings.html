@@ -1,45 +1,61 @@
 {% extends 'runko.html' %}
-
 {% block asiat %}
-
-<h1>Asetukset</h1>
-
-<p>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</p>
-
-<h2>Väliaika-arvot</h2>
-<div class="container">
+  <h1>Asetukset</h1>
+  <p>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</p>
   <form action="" method="post">
-    <p>Aika kuvien ottamisen välillä </p><input type="text" name="snap_i" value="{{ user.snap_i }}" >
-    <br>
-    <p>Aika lämpötilan ja kosetuden mittausten välillä </p><input type="text" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
-    <br>
-    <h2>Lannoitus & kastelu</h2>
-    <p>Kastelun määrä yhdellä kerralla </p><input type="text" name="water_amount" value="{{ user.water_amount }}" >
-    <br>
-    <fieldset>
+    <h3>Väliaika-arvot</h3>
+    <p>
+      <label for="time_0">
+        <span>Aika kasteluiden ja lannoitusten välillä (min)</span>
+      </label>
+      <input id="time_0" type="number" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
+    </p>
+    <p>
+      <label for="time_2">
+        <span>Aika kuvien ottamisen välillä (min)</span>
+      </label>
+      <input id="time_2" type="number" name="snap_i" value="{{ user.snap_i }}" >
+    </p>
+    <h3>Lannoitus &amp; kastelu</h3>
+    <p>
+      <label for="amt_0">
+        <span>Kastelun määrä (yksikkö)</span>
+      </label>
+      <input id="amt_0" type="number" name="water_amount" value="{{ user.water_amount }}">
+    </p>
+    <p>
+      <fieldset>
         <legend>Automaattinen kastelu (päällä / pois) </legend>
         <ul>
           <li>
             <label for="auto_0">
               <span>päällä</span>
             </label>
-            <input name="auto" id="auto_0" value="1" type="radio">
+            <input name="auto" id="auto_0" value="on" type="radio"
+              {% if 1 %}
+                checked
+              {% else %}
+              {% endif %}
+            >
           </li>
           <li>
             <label for="auto_1">
               <span>pois</span>
             </label>
-            <input name="auto" id="auto_1" value="0" type="radio" checked>
+            <input name="auto" id="auto_1" value="off" type="radio"
+              {% if 0 %}
+                checked
+              {% else %}
+                
+              {% endif %}
+            >
           </li>
         </ul>
       </fieldset>
-    <br>
-    <br>
-    {% if error %}
-        <p>Virhe:</p> {{ error }}
-    {% endif %}
-    <input class="submit" type="submit" value="päivitä arvot"/>
-    </form>
-  </div>
+    </p>
+    <p>
+      <button type="submit"> Päivitä arvot </button>
+    </p>
+  </form>
 
 {% endblock asiat %}

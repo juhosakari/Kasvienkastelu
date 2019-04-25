@@ -34,7 +34,7 @@ def index(user):
 	#pdb.set_trace()
 	last_measure = current_user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
 	last_water = current_user.water.order_by(Water.timestamp.desc()).first()
-	last_pic = current_user.pics.order_by(Pics.date.desc()).first()
+	last_pic = Pics.query.order_by(Pics.date.desc()).first()
 
 	if last_measure is None or last_water is None:
 		return render_template('index.html', user=current_user, 
@@ -70,9 +70,10 @@ def settings():
 	if s.getsockname()[0] == request.remote_addr:
 		if request.method == 'POST':
 			try:
-				current_user.snap_i = int(request.form['snap_i'])
+				users = User.query.all()
+				for user in users:
+					user.snap_i = int(request.form['snap_i']) #Muutetaan minuutit sekunneiksi
 				current_user.water_amount = int(request.form['water_amount'])
-				#current_user.autowater = int(request.form['autowater'])
 				current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
 				if int(request.form['auto']) != current_user.autowater:
 					autowater()

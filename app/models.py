@@ -19,7 +19,6 @@ class User(db.Model, UserMixin):
 	autowater = db.Column(db.Boolean, default=False)
 	fertilized = db.Column(db.Boolean, default=False)
 
-	pics = db.relationship('Pics', backref='user', lazy='dynamic')
 	water = db.relationship('Water', backref='user', lazy='dynamic')
 	humidity_temp = db.relationship('Humidity_temp', backref='user', lazy='dynamic')
 
@@ -30,7 +29,6 @@ class Pics(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	path = db.Column(db.String(64), index=True, unique=True)
 	date = db.Column(db.Integer, index=True ,default=datetime.utcnow().timestamp())
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Water(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

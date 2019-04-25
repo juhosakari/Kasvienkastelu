@@ -33,7 +33,7 @@ def temphum(user, datapin):
 		last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
 	except:
 		last_measure = None
-	if last_measure == None or datetime.utcnow().timestamp() - last_measure.timestamp >= user.humidity_temp_i:
+	if last_measure == None or datetime.utcnow().timestamp() - last_measure.timestamp >= user.humidity_temp_i*60:
 		pi=pigpio.pi()
 		s=DHT22.sensor(pi,datapin)
 		s.trigger()
@@ -51,7 +51,7 @@ def snap(user):
 		last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
 	except:
 		last_snap = None
-	if last_snap == None or datetime.utcnow().timestamp() - last_measure.date >= user.snap_i:
+	if last_snap == None or datetime.utcnow().timestamp() - last_measure.date >= user.snap_i*60:
 		pic = Pics(user=user, path="random")
 		try:
 			y = Pics.query.order_by(Pics.date.desc()).first()
