@@ -2,9 +2,10 @@ from app import db
 from app.models import User, Pics, Water, Humidity_temp
 from flask_login import current_user
 import RPi.GPIO as GPIO
-import datetime
+from datetime import datetime
 from picamera import PiCamera
-import time
+from time import sleep
+from time import time # time.time() = unix time (in millisecond)
 import DHT22
 import pigpio
 
@@ -16,19 +17,24 @@ def get_status(pin):
 
 def water(pump_pin, servo_pin, sensor_pin, user):
 	if GPIO.input(sensor_pin):
-		GPIO.output(pump_pin, GPIO.HIGH)
-		time.sleep(user.water_amount)
+		#print(GPIO.input(sensor_pin))
 		GPIO.output(pump_pin, GPIO.LOW)
-		water = Humidity_temp(amount_watered=user.water_amount)
-		db.session.add(measure)
+		sleep(1)
+		GPIO.output(pump_pin, GPIO.HIGH)
+		sleep(2)#user.water_amount
+		GPIO.output(pump_pin, GPIO.LOW)
+		water = Water(user=user ,amount_watered=user.water_amount)
+		db.session.add(water)
 		db.session.commit()
 
 
-def temphum(user):
-	last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
-	if last_measure == None or datetime.utcnow -last_measure.timestamp >= user.humidity_temp_i:
+def temphum(user, datapin):
+	try:
+		last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
+	except:
+		last_measure = None
+	if last_measure == None or datetime.utcnow().timestamp() - last_measure.timestamp >= user.humidity_temp_i:
 		pi=pigpio.pi()
-		datapin=4
 		s=DHT22.sensor(pi,datapin)
 		s.trigger()
 		sleep(2)
@@ -36,16 +42,22 @@ def temphum(user):
 		h=s.temperature()
 		s.cancel
 		pi.stop()
-		measure = Humidity_temp(humidity=h, temp=t)
+		measure = Humidity_temp(user=user ,humidity=h, temp=t)
 		db.session.add(measure)
 		db.session.commit()
 
 def snap(user):
-	last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
-	if last_snap == None or datetime.utcnow -last_snap.timestamp >= user.snap_i:
-		pic = Pics(author=current_user, post_pic_path="random")
-		y = Pics.query.order_by(Pics.timestamp.desc()).first()
-		filename = "post" + str(y.id) + ".png"
+	try:
+		last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
+	except:
+		last_snap = None
+	if last_snap == None or datetime.utcnow().timestamp() - last_measure.date >= user.snap_i:
+		pic = Pics(user=user, path="random")
+		try:
+			y = Pics.query.order_by(Pics.date.desc()).first()
+			filename = "post" + str(y.id) + ".png"
+		except:
+			filename = "post.png"
 		with PiCamera() as camera:
 			camera.capture('app/static/'+ filename)
 		pic.path = filename
@@ -54,15 +66,20 @@ def snap(user):
 
 def main():
 	#Raspberry pi gpio pins
-	PUMP_WATER = 0
-	PUMP_FERTILIZER = 0
-	SERVO_1 = 0
-	SERVO_2 = 0
-	WATER_SENSOR = 0
-	HUMIDITY_TEMP = 0
+	PUMP_WATER		= 19
+	PUMP_FERTILIZER		= 26
+	SERVO_1			= 5
+	SERVO_2			= 6
+	WATER_SENSOR_1		= 21
+	WATER_SENSOR_2		= 18
+	HUMIDITY_TEMP		= 4
 
-	GPIO.setup([PUMP_WATER, PUMP_FERTILIZER, SERVO_2, SERVO_1, WATER_SENSOR], GPIO.OUT)
-	GPIO.setup(WATER_SENSOR, GPIO.OUT)
+
+	GPIO.setup(PUMP_WATER,GPIO.OUT)
+	GPIO.setup(PUMP_FERTILIZER, GPIO.OUT)
+	GPIO.setup([SERVO_2, SERVO_1], GPIO.OUT)
+	GPIO.setup(WATER_SENSOR_1, GPIO.IN)
+	GPIO.setup(WATER_SENSOR_2, GPIO.IN)
 
 	users = User.query.all()
 
@@ -70,16 +87,19 @@ def main():
 		while True:
 			for user in users:
 				if user.name == 'kayttaja1' or user.name == 'kayttaja3':
+					#print("yks")
 					servo_pin = SERVO_1
 					pump_pin = PUMP_FERTILIZER
+					water(pump_pin, servo_pin, WATER_SENSOR_2, user)
 				else:
 					servo_pin = SERVO_2
 					pump_pin = PUMP_WATER
-				water(pump_pin, servo_pin, WATER_SENSOR, user)
-			temphum(user)
+					water(pump_pin, servo_pin, WATER_SENSOR_1, user)
+			temphum(user, HUMIDITY_TEMP)
 			snap(user)
-			#time.sleep(1)
+			sleep(1)
 	except KeyboardInterrupt:
 		GPIO.cleanup()
 
-main()
+if __name__ == '__main__':
+	main()
