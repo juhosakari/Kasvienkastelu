@@ -73,8 +73,8 @@ def settings():
 				users = User.query.all()
 				for user in users:
 					user.snap_i = int(request.form['snap_i']) #Muutetaan minuutit sekunneiksi
+					user.humidity_temp_i = int(request.form['humidity_temp_i'])
 				current_user.water_amount = int(request.form['water_amount'])
-				current_user.humidity_temp_i = int(request.form['humidity_temp_i'])
 				if int(request.form['auto']) != current_user.autowater:
 					autowater()
 			except:

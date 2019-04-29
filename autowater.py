@@ -6,8 +6,8 @@ from datetime import datetime
 from picamera import PiCamera
 from time import sleep
 from time import time # time.time() = unix time (in millisecond)
-import DHT22
-import pigpio
+#import DHT22
+#import pigpio
 
 GPIO.setmode(GPIO.BCM)
 
@@ -33,16 +33,17 @@ def temphum(user, datapin):
 		last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
 	except:
 		last_measure = None
-	if last_measure == None or datetime.utcnow().timestamp() - last_measure.timestamp >= user.humidity_temp_i*60:
+	if last_measure == None or last_measure.timestamp - datetime.utcnow().timestamp() >= user.humidity_temp_i*60:
 		pi=pigpio.pi()
 		s=DHT22.sensor(pi,datapin)
 		s.trigger()
 		sleep(2)
 		t=s.humidity()
 		h=s.temperature()
-		s.cancel
+		s.cancel()
+		sleep(0.2)
 		pi.stop()
-		measure = Humidity_temp(user=user ,humidity=h, temp=t)
+		measure = Humidity_temp(humidity=h, temp=t)
 		db.session.add(measure)
 		db.session.commit()
 
@@ -51,7 +52,7 @@ def snap(user):
 		last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
 	except:
 		last_snap = None
-	if last_snap == None or datetime.utcnow().timestamp() - last_measure.date >= user.snap_i*60:
+	if last_snap == None or last_measure.date - datetime.utcnow().timestamp() >= user.snap_i*60:
 		pic = Pics(user=user, path="random")
 		try:
 			y = Pics.query.order_by(Pics.date.desc()).first()

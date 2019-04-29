@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
 	fertilized = db.Column(db.Boolean, default=False)
 
 	water = db.relationship('Water', backref='user', lazy='dynamic')
-	humidity_temp = db.relationship('Humidity_temp', backref='user', lazy='dynamic')
+	#humidity_temp = db.relationship('Humidity_temp', backref='user', lazy='dynamic')
 
 	def __repr__(self):
 		return '<User {}>'.format(self.name)
@@ -41,4 +41,4 @@ class Humidity_temp(db.Model):
 	humidity = db.Column(db.Integer)
 	temp = db.Column(db.Integer)
 	timestamp = db.Column(db.Integer ,index=True, default=datetime.utcnow().timestamp())
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	#user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
