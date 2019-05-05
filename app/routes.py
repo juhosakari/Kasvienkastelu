@@ -5,17 +5,32 @@ from app.models import User, Humidity_temp, Water, Pics
 import datetime
 import socket
 import os
+import psutil
 
 import pdb
 
-def autowater():
-	if current_user.autowater == False:
-		os.system("python3 autowater.py&")
-		current_user.autowater = True
+def autowater(request):
+	running = False
+	if request:
+		for process in psutil.process_iter():
+			try:
+				if process.cmdline()[1] == 'autowater.py':
+					running = True
+			except:
+				pass
+		if not running:
+			current_user.autowater = True
+			os.system("python3.4 auto_water.py&")
+		else:
+			current_user.autowater = True
+
 	else:
-		os.system("pkill -f autowater.py")
 		current_user.autowater = False
-	return redirect(url_for('settings', user=current_user))
+		users = User.query.all()
+		for user in users:
+			if user.autowater == True:
+				return 0
+    	os.system("pkill -f water.py")
 
 @app.route('/')
 @app.route('/change_user', methods=['POST', 'GET'])
@@ -32,9 +47,10 @@ def change_user():
 @login_required
 def index(user):
 	#pdb.set_trace()
-	last_measure = current_user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
+	last_measure = Humidity_temp.query.order_by(Humidity_temp.timestamp.desc()).first()
 	last_water = current_user.water.order_by(Water.timestamp.desc()).first()
 	last_pic = Pics.query.order_by(Pics.date.desc()).first()
+	print(last_measure, last_water, last_pic)
 
 	if last_measure is None or last_water is None:
 		return render_template('index.html', user=current_user, 
@@ -51,13 +67,13 @@ def index(user):
 	return render_template('index.html', 
 						   user=current_user, 
 						   time=datetime.datetime.now().strftime("%H:%M %d.%m.%Y"),
-						   temphum_timestamp=last_measure.timestamp,
-						   water_timestamp=last_water.timestamp,
-						   temp=last_measure.temp,
-						   humidity=last_measure.humidity,
-						   water_amount=last_water.water_amount,
+						   temphum_timestamp=print(datetime.utcfromtimestamp(last_measure.timestamp).strftime('%Y-%m-%d %H:%M')),
+						   water_timestamp=print(datetime.utcfromtimestamp(last_water.timestamp).strftime('%Y-%m-%d %H:%M')),
+						   temp=round(last_measure.temp, 1),
+						   humidity=round(last_measure.humidity, 1),
+						   water_amount=last_water.amount_watered,
 						   pic_path=last_pic.path,
-						   pic_timestamp=last_pic.timestamp
+						   pic_timestamp=print(datetime.utcfromtimestamp(last_pic.date).strftime('%Y-%m-%d %H:%M'))
 						   )
 
 #Kannattaako autowater laittaa linkiksi vai asetuksiin yhdeksi formin osaksi?
@@ -75,8 +91,8 @@ def settings():
 					user.snap_i = int(request.form['snap_i']) #Muutetaan minuutit sekunneiksi
 					user.humidity_temp_i = int(request.form['humidity_temp_i'])
 				current_user.water_amount = int(request.form['water_amount'])
-				if int(request.form['auto']) != current_user.autowater:
-					autowater()
+				#if int(request.form['auto']) != current_user.autowater:
+				autowater(int(request.form['auto']))
 			except:
 				error = "Jokin arvoista on väärin. Muista että vain kokonaisluvut kelpaavat!"
 				return render_template('settings.html', current_user=current_user, error=error)

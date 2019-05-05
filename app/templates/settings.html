@@ -6,7 +6,7 @@
     <h3>Väliaika-arvot</h3>
     <p>
       <label for="time_0">
-        <span>Aika kasteluiden ja lannoitusten välillä (min)</span>
+        <span>Aika lämpötilan ja kosteuden mittauksien välillä (min)</span>
       </label>
       <input id="time_0" type="number" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
     </p>
@@ -31,10 +31,9 @@
             <label for="auto_0">
               <span>päällä</span>
             </label>
-            <input name="auto" id="auto_0" value="on" type="radio"
-              {% if 1 %}
+            <input name="auto" id="auto_0" value="1" type="radio"
+              {% if user.autowater: %}
                 checked
-              {% else %}
               {% endif %}
             >
           </li>
@@ -42,11 +41,9 @@
             <label for="auto_1">
               <span>pois</span>
             </label>
-            <input name="auto" id="auto_1" value="off" type="radio"
-              {% if 0 %}
-                checked
-              {% else %}
-                
+            <input name="auto" id="auto_1" value="0" type="radio"
+              {% if not user.autowater %}
+                checked 
               {% endif %}
             >
           </li>

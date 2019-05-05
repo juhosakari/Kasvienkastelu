@@ -6,8 +6,8 @@ from datetime import datetime
 from picamera import PiCamera
 from time import sleep
 from time import time # time.time() = unix time (in millisecond)
-#import DHT22
-#import pigpio
+import DHT22
+import pigpio
 
 GPIO.setmode(GPIO.BCM)
 
@@ -23,37 +23,38 @@ def water(pump_pin, servo_pin, sensor_pin, user):
 		GPIO.output(pump_pin, GPIO.HIGH)
 		sleep(2)#user.water_amount
 		GPIO.output(pump_pin, GPIO.LOW)
-		water = Water(user=user ,amount_watered=user.water_amount)
+		water = Water(user=user ,amount_watered=user.water_amount, timestamp=datetime.utcnow().timestamp())
 		db.session.add(water)
 		db.session.commit()
 
 
 def temphum(user, datapin):
 	try:
-		last_measure = user.humidity_temp.order_by(Humidity_temp.timestamp.desc()).first()
+		last_measure = Humidity_temp.query.order_by(Humidity_temp.timestamp.desc()).first()
 	except:
 		last_measure = None
-	if last_measure == None or last_measure.timestamp - datetime.utcnow().timestamp() >= user.humidity_temp_i*60:
+	if last_measure == None or datetime.utcnow().timestamp() - last_measure.timestamp  >= user.humidity_temp_i*60:
 		pi=pigpio.pi()
 		s=DHT22.sensor(pi,datapin)
 		s.trigger()
 		sleep(2)
-		t=s.humidity()
-		h=s.temperature()
+		h=s.humidity()
+		t=s.temperature()
 		s.cancel()
 		sleep(0.2)
 		pi.stop()
-		measure = Humidity_temp(humidity=h, temp=t)
+		measure = Humidity_temp(humidity=h, temp=t, timestamp=datetime.utcnow().timestamp())
 		db.session.add(measure)
 		db.session.commit()
 
 def snap(user):
 	try:
-		last_snap = user.pics.order_by(Pics.timestamp.desc()).first()
+		last_snap = Pics.query.order_by(Pics.date.desc()).first()
 	except:
 		last_snap = None
-	if last_snap == None or last_measure.date - datetime.utcnow().timestamp() >= user.snap_i*60:
-		pic = Pics(user=user, path="random")
+	if last_snap == None or datetime.utcnow().timestamp() - last_snap.date  >= user.snap_i*60:
+		print("yks")
+		pic = Pics(path="random", date=datetime.utcnow().timestamp())
 		try:
 			y = Pics.query.order_by(Pics.date.desc()).first()
 			filename = "post" + str(y.id) + ".png"
