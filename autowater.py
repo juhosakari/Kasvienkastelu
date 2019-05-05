@@ -17,11 +17,10 @@ def get_status(pin):
 
 def water(pump_pin, servo_pin, sensor_pin, user):
 	if GPIO.input(sensor_pin):
-		#print(GPIO.input(sensor_pin))
 		GPIO.output(pump_pin, GPIO.LOW)
 		sleep(1)
 		GPIO.output(pump_pin, GPIO.HIGH)
-		sleep(2)#user.water_amount
+		sleep(2)
 		GPIO.output(pump_pin, GPIO.LOW)
 		water = Water(user=user ,amount_watered=user.water_amount, timestamp=datetime.utcnow().timestamp())
 		db.session.add(water)
@@ -88,15 +87,15 @@ def main():
 	try:
 		while True:
 			for user in users:
-				if user.name == 'kayttaja1' or user.name == 'kayttaja3':
-					#print("yks")
-					servo_pin = SERVO_1
-					pump_pin = PUMP_FERTILIZER
-					water(pump_pin, servo_pin, WATER_SENSOR_2, user)
-				else:
-					servo_pin = SERVO_2
-					pump_pin = PUMP_WATER
-					water(pump_pin, servo_pin, WATER_SENSOR_1, user)
+				if user.autowater:
+					if user.name == 'kayttaja1' or user.name == 'kayttaja3':
+						servo_pin = SERVO_1
+						pump_pin = PUMP_FERTILIZER
+						water(pump_pin, servo_pin, WATER_SENSOR_2, user)
+					else:
+						servo_pin = SERVO_2
+						pump_pin = PUMP_WATER
+						water(pump_pin, servo_pin, WATER_SENSOR_1, user)
 			temphum(user, HUMIDITY_TEMP)
 			snap(user)
 			sleep(1)
