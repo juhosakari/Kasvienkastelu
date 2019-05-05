@@ -4,10 +4,10 @@ from flask_login import current_user
 import RPi.GPIO as GPIO
 from datetime import datetime
 from picamera import PiCamera
-from time import sleep
-from time import time # time.time() = unix time (in millisecond)
+from time import sleep, sleep
 import DHT22
 import pigpio
+from gpiozero import Servo
 
 GPIO.setmode(GPIO.BCM)
 
@@ -15,12 +15,18 @@ def get_status(pin):
 	GPIO.setup(pin, GPIO.IN) 
 	return GPIO.input(pin)
 
-def water(pump_pin, servo_pin, sensor_pin, user):
+def water(pump_pin, servo, sensor_pin, user):
 	if GPIO.input(sensor_pin):
+		servo.mid()
+		sleep(0.5)
+		if servo_turn == "right":
+			servo.min()
+		else:
+			servo.max()
 		GPIO.output(pump_pin, GPIO.LOW)
-		sleep(1)
+		sleep(0.5)
 		GPIO.output(pump_pin, GPIO.HIGH)
-		sleep(2)
+		sleep(2)#sleep(user.water_amount)
 		GPIO.output(pump_pin, GPIO.LOW)
 		water = Water(user=user ,amount_watered=user.water_amount, timestamp=datetime.utcnow().timestamp())
 		db.session.add(water)
@@ -69,18 +75,19 @@ def main():
 	#Raspberry pi gpio pins
 	PUMP_WATER		= 19
 	PUMP_FERTILIZER		= 26
-	SERVO_1			= 5
-	SERVO_2			= 6
+	SERVO_PIN_1			= 5
+	SERVO_PIN_2			= 6
 	WATER_SENSOR_1		= 21
 	WATER_SENSOR_2		= 18
 	HUMIDITY_TEMP		= 4
 
+	GPIO.setup([SERVO_PIN_2, SERVO_PIN_1, PUMP_WATER, PUMP_FERTILIZER], GPIO.OUT)
+	GPIO.setup([WATER_SENSOR_1, WATER_SENSOR_2], GPIO.IN)
 
-	GPIO.setup(PUMP_WATER,GPIO.OUT)
-	GPIO.setup(PUMP_FERTILIZER, GPIO.OUT)
-	GPIO.setup([SERVO_2, SERVO_1], GPIO.OUT)
-	GPIO.setup(WATER_SENSOR_1, GPIO.IN)
-	GPIO.setup(WATER_SENSOR_2, GPIO.IN)
+	maxturn = (2.0+0.45)/1000
+	minturn = (1.0-0.45)/1000
+	servo1 = Servo(SERVO_PIN_1, max_pulse_width=maxturn, min_pulse_width=minturn)
+	servo2 = Servo(SERVO_PIN_2, max_pulse_width=maxturn, min_pulse_width=minturn)
 
 	users = User.query.all()
 
@@ -89,13 +96,20 @@ def main():
 			for user in users:
 				if user.autowater:
 					if user.name == 'kayttaja1' or user.name == 'kayttaja3':
-						servo_pin = SERVO_1
 						pump_pin = PUMP_FERTILIZER
-						water(pump_pin, servo_pin, WATER_SENSOR_2, user)
+						if user.name == 'kayttaja1':
+							servo_turn = "right"
+						else:
+							servo_turn = "left"
+						water(pump_pin, servo1, WATER_SENSOR_2, servo_turn, user)
+						#servo_turn= direction in which servo will turn(right/left)
 					else:
-						servo_pin = SERVO_2
 						pump_pin = PUMP_WATER
-						water(pump_pin, servo_pin, WATER_SENSOR_1, user)
+						if user.name == 'kayttaja2':
+							servo_turn = "right"
+						else:
+							servo_turn = "left"
+						water(pump_pin, servo2, WATER_SENSOR_1, servo_turn, user)
 			temphum(user, HUMIDITY_TEMP)
 			snap(user)
 			sleep(1)
