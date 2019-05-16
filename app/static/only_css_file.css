@@ -1,0 +1,42 @@
+input[type="number"] {
+  -moz-appearance:textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+* {
+  font-family: verdana, sans-serif;
+}
+h1 {
+  margin-top: 0;
+}
+form ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+input:focus, textarea:focus {
+  border-color: #000;
+}
+fieldset {
+  width: 350;
+}
+form {
+  width: 600;
+  border: 1px solid #666;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em;
+  margin-top: 0;
+}
+table {
+  width: 600px;
+}
+td {
+  border: 1px solid black;
+  height: 2em;
+}
+img {
+  width: 600px;
+}

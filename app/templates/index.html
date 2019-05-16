@@ -1,0 +1,57 @@
+{% extends 'runko.html' %}
+
+{% block asiat %}
+<h1>
+Raspberry pi:n ohjauspaneeli
+</h1>
+
+<h2>Kuva</h2>
+<img class="ii" src="{{ url_for('static', filename=pic_path) }}" />
+<p> {{ pic_timestamp }} </p>
+
+<h2>Perustietoa</h2>
+<table>
+  <tr>
+    <td>Humidity and Temperature measured at {{ temphum_timestamp }}</td>
+    <td class = "left">temperature: {{ temp }} humidity: {{ humidity }}</td>
+  </tr>
+  <tr>
+    <td>Last watered</td>
+    <td class = "left">{{ water_timestamp }}</td>
+  </tr>
+  <tr>
+  <td>Amount watered</td>
+    <td class = "left">{{ water_amount }}</td>
+  </tr>
+  <tr>
+    <td>Time</td>
+    <td class = "left">{{ time }}</td>
+  </tr>
+</table>
+
+<h2>Nykyiset asetuksien arvot</h2>
+<table style="">
+  <tr>
+    <td>Humitidy and temperature measuring interval</td>
+    <td class = "left">{{ user.humidity_temp_i }}</td>
+  </tr>
+  <tr>
+    <td>Fertilized</td>
+    <td class = "left">{{ user.fertilized }}</td>
+  </tr>
+  <tr>
+    <td>Picture taking interval</td>
+    <td class = "left">{{ user.snap_i }}</td>
+  </tr>
+  <tr>
+    <td>Amount to water at one instance</td>
+    <td class = "left">{{ user.water_amount }}</td>
+  </tr>
+  <tr>
+    <td>Autowater</td>
+    <td class = "left">{{ current_user.autowater }}</td>
+  </tr>
+</table>
+
+{% endblock asiat %}
+

@@ -1,0 +1,58 @@
+{% extends 'runko.html' %}
+{% block asiat %}
+  <h1>Asetukset</h1>
+  <p>Tällä sivulla voit muokata erilaisia kasteluun liittyviä arvoja</p>
+  <form action="" method="post">
+    <h3>Väliaika-arvot</h3>
+    <p>
+      <label for="time_0">
+        <span>Aika lämpötilan ja kosteuden mittauksien välillä (min)</span>
+      </label>
+      <input id="time_0" type="number" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
+    </p>
+    <p>
+      <label for="time_2">
+        <span>Aika kuvien ottamisen välillä (min)</span>
+      </label>
+      <input id="time_2" type="number" name="snap_i" value="{{ user.snap_i }}" >
+    </p>
+    <h3>Lannoitus &amp; kastelu</h3>
+    <p>
+      <label for="amt_0">
+        <span>Kastelun määrä (yksikkö)</span>
+      </label>
+      <input id="amt_0" type="number" name="water_amount" value="{{ user.water_amount }}">
+    </p>
+    <p>
+      <fieldset>
+        <legend>Automaattinen kastelu (päällä / pois) </legend>
+        <ul>
+          <li>
+            <label for="auto_0">
+              <span>päällä</span>
+            </label>
+            <input name="auto" id="auto_0" value="1" type="radio"
+              {% if user.autowater: %}
+                checked
+              {% endif %}
+            >
+          </li>
+          <li>
+            <label for="auto_1">
+              <span>pois</span>
+            </label>
+            <input name="auto" id="auto_1" value="0" type="radio"
+              {% if not user.autowater %}
+                checked 
+              {% endif %}
+            >
+          </li>
+        </ul>
+      </fieldset>
+    </p>
+    <p>
+      <button type="submit"> Päivitä arvot </button>
+    </p>
+  </form>
+
+{% endblock asiat %}
