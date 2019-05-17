@@ -6,22 +6,23 @@
     <h3>Väliaika-arvot</h3>
     <p>
       <label for="time_0">
-        <span>Aika lämpötilan ja kosteuden mittauksien välillä (min)</span>
+        <span>Aika lämpötilan ja kosteuden mittauksien välillä. Minimi arvo 10 (min)</span>
       </label>
-      <input id="time_0" type="number" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" >
+      <input id="time_0" type="number" name="humidity_temp_i" value="{{ user.humidity_temp_i }}" min="10" >
+      
     </p>
     <p>
       <label for="time_2">
-        <span>Aika kuvien ottamisen välillä (min)</span>
+        <span>Aika kuvien ottamisen välillä. Minimi arvo 10 (min)</span>
       </label>
-      <input id="time_2" type="number" name="snap_i" value="{{ user.snap_i }}" >
+      <input id="time_2" type="number" name="snap_i" value="{{ user.snap_i }}" min="10" >
     </p>
     <h3>Lannoitus &amp; kastelu</h3>
     <p>
       <label for="amt_0">
-        <span>Kastelun määrä (yksikkö)</span>
+        <span>Kastelun määrä. Minimi arvo 1 (yksikkö)</span>
       </label>
-      <input id="amt_0" type="number" name="water_amount" value="{{ user.water_amount }}">
+      <input id="amt_0" type="number" name="water_amount" value="{{ user.water_amount }}" min="1" >
     </p>
     <p>
       <fieldset>
